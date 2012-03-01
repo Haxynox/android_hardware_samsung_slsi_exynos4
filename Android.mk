@@ -25,7 +25,8 @@ common_exynos4_dirs := \
 	libswscaler \
 	libcsc \
 	libstagefrighthw \
-	libcodec
+	libcodec \
+	libion_exynos
 
 ifneq (,$(findstring smdk,$(PRODUCT_BOARD)))
 common_exynos4_dirs += \
