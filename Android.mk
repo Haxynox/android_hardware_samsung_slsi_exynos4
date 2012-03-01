@@ -48,5 +48,4 @@ ifeq ($(TARGET_SOC),exynos4210)
 else
   include $(call all-named-subdir-makefiles,$(exynos4x12_dirs))
 endif
-
 endif

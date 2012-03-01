@@ -16,16 +16,27 @@
  * Modify this file, if needed, to match your platform setup.
  */
 
-#ifndef __UMP_PLATFORM_H__
-#define __UMP_PLATFORM_H__
+
+#ifndef _UMP_PLATFORM_H_
+#define _UMP_PLATFORM_H_
+
+#include "malisw/mali_stdtypes.h"
 
 /** @addtogroup ump_user_space_api
  * @{ */
 
 /**
  * A define which controls how UMP user space API functions are imported and exported.
- * This define should be set by the implementor of the UMP API.
+ *
+ * Functions exported by the driver is tagged with UMP_API_EXPORT to allow
+ * the compiler/build system/OS loader to detect and handle functions which is to be exported/imported from a shared library. @n
+ * This define should be set by the implementor of the UMP API to match their needs if needed.
+ *
+ * Typical usage example in the driver:
+ *
+ * UMP_API_EXPORT void my_api_call(void);
  */
+
 #if defined(_WIN32)
 
 #define UMP_API_EXPORT
@@ -43,4 +54,4 @@
 /** @} */ /* end group ump_user_space_api */
 
 
-#endif /* __UMP_PLATFORM_H__ */
+#endif /* _UMP_PLATFORM_H_ */
