@@ -15,8 +15,8 @@
 */
 
 /*!
- * \file      SecBuffer.h
- * \brief     header file for SecBuffer
+ * \file      ExynosBuffer.h
+ * \brief     header file for ExynosBuffer
  * \author    Sangwoo, Park(sw5771.park@samsung.com)
  * \date      2011/06/02
  *
@@ -24,28 +24,21 @@
  * - 2010/06/03 : Sangwoo, Park(sw5771.park@samsung.com) \n
  *   Initial version
  *
+ * - 2012/03/14 : sangwoo.park(sw5771.park@samsung.com) \n
+ *   Change file, struct name to ExynosXXX.
+ *
  */
 
-/**
- * @page SecBuffer
- *
- * @section Introduction
- * SecBuffer is common struct for buffer
- *
- * @section Copyright
- *  Copyright (c) 2008-2011 Samsung Electronics Co., Ltd.All rights reserved. \n
- *  Proprietary and Confidential
- *
- * @image html samsung.png
- */
-
-#ifndef __SEC_BUFFER_H__
-#define __SEC_BUFFER_H__
+#ifndef EXYNOS_BUFFER_H_
+#define EXYNOS_BUFFER_H_
 
 #include <sys/types.h>
 
 //! Buffer information
-struct SecBuffer
+/*!
+ * \ingroup Exynos
+ */
+struct ExynosBuffer
 {
 public:
     //! Buffer type
@@ -82,8 +75,9 @@ public:
         unsigned int extS[3];
     } size;
 
+#ifdef __cplusplus
     //! Constructor
-    SecBuffer()
+    ExynosBuffer()
     {
         for (int i = 0; i < 3; i++) {
             virt.    extP[i] = NULL;
@@ -94,7 +88,7 @@ public:
     }
 
     //! Constructor
-    SecBuffer(const SecBuffer *other)
+    ExynosBuffer(const ExynosBuffer *other)
     {
         for (int i = 0; i < 3; i++) {
             virt.    extP[i] = other->virt.extP[i];
@@ -105,7 +99,7 @@ public:
     }
 
     //! Operator(=) override
-    SecBuffer& operator =(const SecBuffer &other)
+    ExynosBuffer& operator =(const ExynosBuffer &other)
     {
         for (int i = 0; i < 3; i++) {
             virt.    extP[i] = other.virt.extP[i];
@@ -117,7 +111,7 @@ public:
     }
 
     //! Operator(==) override
-    bool operator ==(const SecBuffer &other) const
+    bool operator ==(const ExynosBuffer &other) const
     {
         return (   virt.    extP[0] == other.virt.extP[0]
                 && virt.    extP[1] == other.virt.extP[1]
@@ -134,14 +128,14 @@ public:
     }
 
     //! Operator(!=) override
-    bool operator !=(const SecBuffer &other) const
+    bool operator !=(const ExynosBuffer &other) const
     {
         // use operator(==)
         return !(*this == other);
     }
 
     //! Get Buffer type
-    static int BUFFER_TYPE(SecBuffer *buf)
+    static int BUFFER_TYPE(ExynosBuffer *buf)
     {
         int type = BUFFER_TYPE_BASE;
         if (buf->virt.p)
@@ -153,6 +147,7 @@ public:
 
         return type;
     }
+#endif
 };
 
-#endif //__SEC_BUFFER_H__
+#endif //EXYNOS_BUFFER_H_

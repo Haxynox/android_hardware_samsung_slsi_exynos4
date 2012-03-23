@@ -15,8 +15,8 @@
 */
 
 /*!
- * \file      SecRect.h
- * \brief     header file for SecRect
+ * \file      ExynosRect.h
+ * \brief     header file for ExynosRect
  * \author    Sangwoo, Park(sw5771.park@samsung.com)
  * \date      2011/06/02
  *
@@ -24,26 +24,19 @@
  * - 2010/06/03 : Sangwoo, Park(sw5771.park@samsung.com) \n
  *   Initial version
  *
+ * - 2012/03/14 : sangwoo.park(sw5771.park@samsung.com) \n
+ *   Change file, struct name to ExynosXXX.
+ *
  */
 
-/**
- * @page SecRect
- *
- * @section Introduction
- * SetRect is common struct for rectangle
- *
- * @section Copyright
- *  Copyright (c) 2008-2011 Samsung Electronics Co., Ltd.All rights reserved. \n
- *  Proprietary and Confidential
- *
- * @image html samsung.png
- */
-
-#ifndef __SEC_RECT_H__
-#define __SEC_RECT_H__
+#ifndef EXYNOS_RECT_H_
+#define EXYNOS_RECT_H_
 
 //! Rectangle information
-struct SecRect
+/*!
+ * \ingroup Exynos
+ */
+struct ExynosRect
 {
     int x;           //!< x pos
     int y;           //!< y pos
@@ -53,8 +46,9 @@ struct SecRect
     int fullH;       //!< full height of image
     int colorFormat; //!< V4L2_PIX_FMT_XXX
 
+#ifdef __cplusplus
     //! Constructor
-    SecRect(int _x_ = 0,
+    ExynosRect(int _x_ = 0,
             int _y_ = 0,
             int _w_ = 0,
             int _h_ = 0,
@@ -72,7 +66,7 @@ struct SecRect
     }
 
     //! Constructor
-    SecRect(const SecRect *other)
+    ExynosRect(const ExynosRect *other)
     {
         x           = other->x;
         y           = other->y;
@@ -84,7 +78,7 @@ struct SecRect
     }
 
     //! Operator(=) override
-    SecRect& operator =(const SecRect &other)
+    ExynosRect& operator =(const ExynosRect &other)
     {
         x           = other.x;
         y           = other.y;
@@ -97,7 +91,7 @@ struct SecRect
     }
 
     //! Operator(==) override
-    bool operator ==(const SecRect &other) const
+    bool operator ==(const ExynosRect &other) const
     {
         return (   x           == other.x
                 && y           == other.y
@@ -109,23 +103,28 @@ struct SecRect
     }
 
     //! Operator(!=) override
-    bool operator !=(const SecRect &other) const
+    bool operator !=(const ExynosRect &other) const
     {
         // use operator(==)
         return !(*this == other);
     }
+#endif
 };
 
 //! Clip information
-struct SecRect2
+/*!
+ * \ingroup Exynos
+ */
+struct ExynosRect2
 {
     int x1; //!< Left   (The x-coordinate value of upper-left corner)
     int y1; //!< Top    (The y-coordinate value of upper-left corner)
     int x2; //!< Right  (The x-coordinate value of lower-right corner)
     int y2; //!< Bottom (The y-coordinate value of lower-right corner)
 
+#ifdef __cplusplus
     //! Constructor
-    SecRect2(int _x1_ = 0, int _y1_ = 0, int _x2_ = 0, int _y2_ = 0)
+    ExynosRect2(int _x1_ = 0, int _y1_ = 0, int _x2_ = 0, int _y2_ = 0)
     {
         x1 = _x1_;
         y1 = _y1_;
@@ -134,7 +133,7 @@ struct SecRect2
     }
 
     //! Constructor
-    SecRect2(const SecRect2 *other)
+    ExynosRect2(const ExynosRect2 *other)
     {
         x1 = other->x1;
         y1 = other->y1;
@@ -143,7 +142,7 @@ struct SecRect2
     }
 
     //! Operator(=) override
-    SecRect2& operator =(const SecRect2 &other)
+    ExynosRect2& operator =(const ExynosRect2 &other)
     {
         x1 = other.x1;
         y1 = other.y1;
@@ -153,20 +152,21 @@ struct SecRect2
     }
 
     //! Operator(==) override
-    bool operator ==(const SecRect2 &other) const
+    bool operator ==(const ExynosRect2 &other) const
     {
-        return (   x1           == other.x1
-                && y1           == other.y1
-                && x2           == other.x2
-                && y2           == other.y2);
+        return (   x1 == other.x1
+                && y1 == other.y1
+                && x2 == other.x2
+                && y2 == other.y2);
     }
 
     //! Operator(!=) override
-    bool operator !=(const SecRect2 &other) const
+    bool operator !=(const ExynosRect2 &other) const
     {
         // use operator(==)
         return !(*this == other);
     }
+#endif
 };
 
-#endif //__SEC_RECT_H__
+#endif //EXYNOS_RECT_H_

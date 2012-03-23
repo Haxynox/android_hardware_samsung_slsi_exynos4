@@ -52,6 +52,11 @@ typedef struct {
     unsigned int lcd_offset_y;
 } s3c_fb_next_info_t;
 
+struct s3c_fb_user_ion_client {
+    int fd;
+    int offset;
+};
+
 /*
  * C U S T O M  I O C T L S
  *
