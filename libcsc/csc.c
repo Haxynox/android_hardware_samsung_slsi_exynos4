@@ -35,8 +35,7 @@
 #include <utils/Log.h>
 
 #include "csc.h"
-#include "sec_format.h"
-#include "sec_utils_v4l2.h"
+#include "exynos_format.h"
 #include "swconverter.h"
 
 #ifdef EXYNOS_OMX
@@ -418,6 +417,8 @@ void *csc_init(
         }
     }
 
+    LOGD("%s:: CSC_METHOD=%d", __func__, csc_handle->csc_method);
+
     return (void *)csc_handle;
 }
 
@@ -425,28 +426,28 @@ CSC_ERRORCODE csc_deinit(
     void *handle)
 {
     CSC_ERRORCODE ret = CSC_ErrorNone;
-    CSC_HANDLE *csc_handle = NULL;
+    CSC_HANDLE *csc_handle;
 
     csc_handle = (CSC_HANDLE *)handle;
-    if (csc_handle != NULL) {
-        if (csc_handle->csc_method == CSC_METHOD_HW) {
-            switch (csc_handle->csc_hw_type) {
+    if (csc_handle->csc_method == CSC_METHOD_HW) {
+        switch (csc_handle->csc_hw_type) {
 #ifdef USE_FIMC
-            case CSC_HW_TYPE_FIMC:
-                csc_hwconverter_close(csc_handle->csc_hw_handle);
-                break;
+        case CSC_HW_TYPE_FIMC:
+            csc_hwconverter_close(csc_handle->csc_hw_handle);
+            break;
 #endif
 #ifdef USE_GSCALER
-            case CSC_HW_TYPE_GSCALER:
-                exynos_gsc_destroy(csc_handle->csc_hw_handle);
-                break;
+        case CSC_HW_TYPE_GSCALER:
+            exynos_gsc_destroy(csc_handle->csc_hw_handle);
+            break;
 #endif
-            default:
-                LOGE("%s:: unsupported csc_hw_type", __func__);
-                break;
-            }
+        default:
+            LOGE("%s:: unsupported csc_hw_type", __func__);
+            break;
         }
+    }
 
+    if (csc_handle != NULL) {
         free(csc_handle);
         ret = CSC_ErrorNone;
     }
