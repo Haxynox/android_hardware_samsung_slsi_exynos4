@@ -5,27 +5,21 @@ include $(CLEAR_VARS)
 # hw/<COPYPIX_HARDWARE_MODULE_ID>.<ro.product.board>.so
 LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/hw
 
-LOCAL_C_INCLUDES += $(LOCAL_PATH)/../include
+LOCAL_C_INCLUDES += \
+	$(LOCAL_PATH)/../include \
+	$(LOCAL_PATH)/../libexynosutils \
+	$(LOCAL_PATH)/../libcsc
 
-ifeq ($(CAMERA_USE_DIGITALZOOM), true)
 LOCAL_SRC_FILES:= \
-	SecCamera_zoom.cpp SecCameraHWInterface_zoom.cpp
-else
-LOCAL_SRC_FILES:= \
-	SecCamera.cpp SecCameraHWInterface.cpp
-endif
+	ExynosCamera.cpp \
+	ExynosJpegEncoderForCamera.cpp \
+	ExynosCameraHWInterface.cpp
 
-LOCAL_SHARED_LIBRARIES:= libutils libcutils libbinder liblog libcamera_client libhardware libswscaler
+LOCAL_SHARED_LIBRARIES:= libutils libcutils libbinder liblog libcamera_client libhardware
 
-ifeq ($(TARGET_SOC), exynos4210)
-LOCAL_SHARED_LIBRARIES += libs5pjpeg
-LOCAL_CFLAGS += -DSAMSUNG_EXYNOS4210
-endif
+LOCAL_CFLAGS += -DGAIA_FW_BETA
 
-ifeq ($(TARGET_SOC), exynos4x12)
-LOCAL_SHARED_LIBRARIES += libhwjpeg
-LOCAL_CFLAGS += -DSAMSUNG_EXYNOS4x12
-endif
+LOCAL_SHARED_LIBRARIES += libexynosutils libhwjpeg libexynosv4l2 libcsc libion
 
 LOCAL_MODULE := camera.$(TARGET_DEVICE)
 
