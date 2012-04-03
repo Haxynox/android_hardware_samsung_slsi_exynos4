@@ -21,7 +21,7 @@
 #define _S5P_FIMC_H_
 
 #include "videodev2.h"
-#include "SecBuffer.h"
+#include "videodev2_exynos.h"
 
 /*
  * G E N E R A L S
@@ -71,12 +71,9 @@
 #define V4L2_PIX_FMT_NV16X      v4l2_fourcc('N', '1', '6', 'X')
 #define V4L2_PIX_FMT_NV61X      v4l2_fourcc('N', '6', '1', 'X')
 
-#define V4L2_PIX_FMT_NV12T      v4l2_fourcc('T', 'V', '1', '2') /* 12  Y/CbCr 4:2:0 64x32 macroblocks */
-
 /* CID extensions */
 #define V4L2_CID_ROTATION       (V4L2_CID_PRIVATE_BASE + 0)
 #define V4L2_CID_OVLY_MODE              (V4L2_CID_PRIVATE_BASE + 9)
-#define V4L2_CID_DST_INFO       (V4L2_CID_PRIVATE_BASE + 10)
 #define V4L2_CID_GET_PHY_SRC_YADDR  (V4L2_CID_PRIVATE_BASE + 12)
 #define V4L2_CID_GET_PHY_SRC_CADDR  (V4L2_CID_PRIVATE_BASE + 13)
 #define V4L2_CID_RESERVED_MEM_BASE_ADDR (V4L2_CID_PRIVATE_BASE + 20)
@@ -158,7 +155,6 @@ typedef struct _s5p_fimc_t {
     s5p_fimc_params_t   params;
 
     int                 use_ext_out_mem;
-    unsigned int        hw_ver;
 } s5p_fimc_t;
 
 #endif
