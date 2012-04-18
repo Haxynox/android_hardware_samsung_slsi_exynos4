@@ -19,12 +19,15 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH) \
 	$(LOCAL_PATH)/../include
 
 LOCAL_SRC_FILES:= \
-	jpeg_hal_unit.c \
+	ExynosJpegBase.cpp \
+	ExynosJpegEncoder.cpp \
+	ExynosJpegDecoder.cpp
 
 LOCAL_SHARED_LIBRARIES :=    \
 	libcutils	\
+	libion
 
-LOCAL_STATIC_LIBRARIES := \
+#LOCAL_STATIC_LIBRARIES := \
 
 LOCAL_MODULE:= libhwjpeg
 
