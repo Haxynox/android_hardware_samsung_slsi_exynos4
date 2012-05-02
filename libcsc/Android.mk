@@ -7,6 +7,8 @@ include $(CLEAR_VARS)
 LOCAL_SRC_FILES := \
     csc_helper.c
 
+LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)
+
 LOCAL_C_INCLUDES := \
     system/core/include \
     $(LOCAL_PATH)/../exynos_omx/openmax/$(OMX_NAME)_omx/include/khronos \
@@ -39,6 +41,9 @@ LOCAL_C_INCLUDES := \
 	hardware/samsung_slsi/openmax/include/$(OMX_NAME) \
     hardware/samsung_slsi/exynos5/include \
 	$(LOCAL_PATH)/../libexynosutils
+
+LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)
+
 LOCAL_CFLAGS :=
 
 LOCAL_MODULE := libcsc
