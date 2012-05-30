@@ -26,7 +26,11 @@ common_exynos4_dirs := \
 	libcsc \
 	libstagefrighthw \
 	libcodec \
-	libion_exynos
+	libion_exynos \
+	libhwc
+
+BOARD_USE_V4L2 := true
+BOARD_USE_V4L2_ION := true
 
 ifneq (,$(findstring smdk,$(PRODUCT_BOARD)))
 common_exynos4_dirs += \

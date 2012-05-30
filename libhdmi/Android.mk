@@ -12,6 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ifeq ($(filter-out exynos4,$(TARGET_BOARD_PLATFORM)),)
-include $(all-subdir-makefiles)
-endif
+# stagefright and device specific modules
+PRODUCT_PACKAGES += \
+	libstagefrighthw \
+	libExynosOMX_Core
+
+# hw composer HAL
+PRODUCT_PACKAGES += \
+	hwcomposer.exynos4
