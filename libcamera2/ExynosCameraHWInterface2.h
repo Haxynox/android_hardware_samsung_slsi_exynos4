@@ -607,6 +607,7 @@ class MainThread : public SignalDrivenThread {
     bool                                m_scp_closed;
     bool                                m_wideAspect;
     uint32_t                            lastAfRegion[4];
+    float                               m_zoomRatio;
 
     mutable Mutex    m_qbufLock;
 
