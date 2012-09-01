@@ -606,6 +606,7 @@ class MainThread : public SignalDrivenThread {
     bool                                m_scp_closing;
     bool                                m_scp_closed;
     bool                                m_wideAspect;
+    bool                                m_aspectChanged;
     uint32_t                            lastAfRegion[4];
     float                               m_zoomRatio;
 
@@ -623,6 +624,8 @@ class MainThread : public SignalDrivenThread {
     int                                 m_afPendingTriggerId;
     int                                 m_afModeWaitingCnt;
     struct camera2_shot                 m_jpegMetadata;
+    int                                 m_scpOutputSignalCnt;
+    int                                 m_scpOutputImageCnt;
     int                                 m_nightCaptureCnt;
     int                                 m_nightCaptureFrameCnt;
     int                                 m_thumbNailW;
