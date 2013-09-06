@@ -1,4 +1,4 @@
-# Copyright (C) 2008 The Android Open Source Project
+# Copyright (C) 2013 The Android Open Source Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,23 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# stagefright and device specific modules
-PRODUCT_PACKAGES += \
-	libstagefrighthw \
-	libExynosOMX_Core
+LOCAL_PATH := $(call my-dir)
 
-# hw composer HAL
-PRODUCT_PACKAGES += \
-	hwcomposer.exynos4
+# HAL module implemenation stored in
+# hw/<POWERS_HARDWARE_MODULE_ID>.<ro.hardware>.so
+include $(CLEAR_VARS)
 
-# MobiCore
-PRODUCT_PACKAGES += \
-	mcDriverDaemon
-
-# Keystore
-PRODUCT_PACKAGES += \
-	keystore.exynos5
-
-# Memory Tracker HAL
-PRODUCT_PACKAGES += \
-	memtrack.exynos5
+LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/hw
+LOCAL_C_INCLUDES += hardware/libhardware/include
+LOCAL_SHARED_LIBRARIES := liblog
+LOCAL_SRC_FILES := memtrack_exynos5.c mali.c
+LOCAL_MODULE := memtrack.exynos5
+include $(BUILD_SHARED_LIBRARY)
