@@ -332,12 +332,6 @@ static bool exynos5_supports_gscaler(hwc_layer_1_t &layer, int format,
     return true;
 }
 
-static bool exynos5_requires_gscaler(hwc_layer_1_t &layer, int format)
-{
-    return exynos5_format_requires_gscaler(format) ||
-            is_scaled(layer) || is_transformed(layer);
-}
-
 int hdmi_get_config(struct exynos5_hwc_composer_device_1_t *dev)
 {
     struct v4l2_dv_preset preset;
@@ -697,7 +691,7 @@ bool exynos5_supports_overlay(hwc_layer_1_t &layer, size_t i)
         return false;
     }
 
-    if (exynos5_requires_gscaler(layer, handle->format)) {
+    if (exynos5_format_requires_gscaler(handle->format)) {
         if (!exynos5_supports_gscaler(layer, handle->format, false)) {
             ALOGV("\tlayer %u: gscaler required but not supported", i);
             return false;
@@ -705,6 +699,14 @@ bool exynos5_supports_overlay(hwc_layer_1_t &layer, size_t i)
     } else {
         if (!exynos5_format_is_supported(handle->format)) {
             ALOGV("\tlayer %u: pixel format %u not supported", i, handle->format);
+            return false;
+        }
+        if (is_scaled(layer)) {
+            ALOGV("\tlayer %u: scaling not supported", i);
+            return false;
+        }
+        if (is_transformed(layer)) {
+            ALOGV("\tlayer %u: transformations not supported", i);
             return false;
         }
     }
@@ -857,7 +859,7 @@ static int exynos5_prepare(hwc_composer_device_1_t *dev,
             size_t pixels_needed = WIDTH(layer.displayFrame) *
                     HEIGHT(layer.displayFrame);
             bool can_compose = windows_left && pixels_needed <= pixels_left;
-            bool gsc_required = exynos5_requires_gscaler(layer, handle->format);
+            bool gsc_required = exynos5_format_requires_gscaler(handle->format);
             if (gsc_required)
                 can_compose = can_compose && gsc_left;
 
@@ -922,7 +924,7 @@ static int exynos5_prepare(hwc_composer_device_1_t *dev,
             if (layer.compositionType == HWC_OVERLAY) {
                 private_handle_t *handle =
                         private_handle_t::dynamicCast(layer.handle);
-                if (exynos5_requires_gscaler(layer, handle->format)) {
+                if (exynos5_format_requires_gscaler(handle->format)) {
                     ALOGV("\tusing gscaler %u", AVAILABLE_GSC_UNITS[nextGsc]);
                     pdev->bufs.gsc_map[i].mode =
                             exynos5_gsc_map_t::GSC_M2M;
