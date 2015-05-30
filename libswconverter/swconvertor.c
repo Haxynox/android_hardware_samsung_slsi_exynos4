@@ -18,11 +18,7 @@
 /*
  * @file    swconvertor.c
  *
-<<<<<<< HEAD
  * @brief   SEC_OMX specific define
-=======
- * @brief   SEC_OMX specific define. It support MFC 6.x tiled.
->>>>>>> 9b81eb7... hardware: exynos5: add initial libswconverter
  *
  * @author  ShinWon Lee (shinwon.lee@samsung.com)
  *
@@ -36,7 +32,6 @@
 #include "stdlib.h"
 #include "swconverter.h"
 
-<<<<<<< HEAD
 /*
  * Get tiled address of position(x,y)
  *
@@ -94,42 +89,6 @@ static int tile_4x2_read(int x_size, int y_size, int x_pos, int y_pos)
     trans_addr = (linear_addr1 <<13) | (bank_addr << 11) | linear_addr0;
 
     return trans_addr;
-=======
-/* 2D Configurable tiled memory access (TM)
- * Return the linear address from tiled position (x, y) */
-unsigned int Tile2D_To_Linear(
-    unsigned int width,
-    unsigned int height,
-    unsigned int xpos,
-    unsigned int ypos,
-    int crFlag)
-{
-    int  tileNumX;
-    int  tileX, tileY;
-    int  tileAddr;
-    int  offset;
-    int  addr;
-
-    width = ((width + 15) / 16) * 16;
-    tileNumX = width / 16;
-
-    /* crFlag - 0: Y plane, 1: CbCr plane */
-    if (crFlag == 0) {
-        tileX = xpos / 16;
-        tileY = ypos / 16;
-        tileAddr = tileY * tileNumX + tileX;
-        offset = (ypos & 15) * 16 + (xpos & 15);
-        addr = (tileAddr << 8) | offset;
-    } else {
-        tileX = xpos / 16;
-        tileY = ypos / 8;
-        tileAddr = tileY * tileNumX + tileX;
-        offset = (ypos & 7) * 16 + (xpos & 15);
-        addr = (tileAddr << 7) | offset;
-    }
-
-    return addr;
->>>>>>> 9b81eb7... hardware: exynos5: add initial libswconverter
 }
 
 /*
@@ -183,7 +142,6 @@ void csc_interleave_memcpy(
 {
     unsigned int i = 0;
     for(i=0; i<src_size; i++) {
-<<<<<<< HEAD
         dest[i * 2] = src1[i];
         dest[i * 2 + 1] = src2[i];
     }
@@ -385,15 +343,10 @@ static void csc_tiled_to_linear_crop(
                 linear_offset = linear_offset+2;
             }
         }
-=======
-        dest[i*2] = src1[i];
-        dest[i*2+1] = src2[i];
->>>>>>> 9b81eb7... hardware: exynos5: add initial libswconverter
     }
 }
 
 /*
-<<<<<<< HEAD
  * Converts and Deinterleaves tiled data to linear
  * Crops left, top, right, buttom
  * 1. UV of NV12T to UV of YUV420P
@@ -1291,9 +1244,6 @@ void csc_linear_to_tiled_interleave_crop_neon(
 
 /*
  * Converts tiled data to linear.
-=======
- * Converts tiled data to linear for mfc 6.x tiled
->>>>>>> 9b81eb7... hardware: exynos5: add initial libswconverter
  * 1. y of nv12t to y of yuv420p
  * 2. y of nv12t to y of yuv420s
  *
@@ -1318,82 +1268,12 @@ void csc_tiled_to_linear_y(
     unsigned int width,
     unsigned int height)
 {
-<<<<<<< HEAD
     csc_tiled_to_linear_crop(y_dst, y_src, width, height, 0, 0, 0, 0);
 }
 
 /*
  * Converts tiled data to linear
  * 1. uv of nv12t to y of yuv420s
-=======
-    unsigned int i, j, k;
-    unsigned int aligned_width, aligned_height;
-    unsigned int tiled_width;
-    unsigned int src_offset, dst_offset;
-
-    aligned_height = height & (~0xF);
-    aligned_width = width & (~0xF);
-    tiled_width = ((width + 15) >> 4) << 4;
-
-    for (i = 0; i < aligned_height; i = i + 16) {
-        for (j = 0; j<aligned_width; j = j + 16) {
-            src_offset = (tiled_width * i) + (j << 4);
-            dst_offset = width * i + j;
-            for (k = 0; k < 8; k++) {
-                memcpy(y_dst + dst_offset, y_src + src_offset, 16);
-                src_offset += 16;
-                dst_offset += width;
-                memcpy(y_dst + dst_offset, y_src + src_offset, 16);
-                src_offset += 16;
-                dst_offset += width;
-            }
-        }
-        if (aligned_width != width) {
-            src_offset = (tiled_width * i) + (j << 4);
-            dst_offset = width * i + j;
-            for (k = 0; k < 8; k++) {
-                memcpy(y_dst + dst_offset, y_src + src_offset, width - j);
-                src_offset += 16;
-                dst_offset += width;
-                memcpy(y_dst + dst_offset, y_src + src_offset, width - j);
-                src_offset += 16;
-                dst_offset += width;
-            }
-        }
-    }
-
-    if (aligned_height != height) {
-        for (j = 0; j<aligned_width; j = j + 16) {
-            src_offset = (tiled_width * i) + (j << 4);
-            dst_offset = width * i + j;
-            for (k = 0; k < height - aligned_height; k = k + 2) {
-                memcpy(y_dst + dst_offset, y_src + src_offset, 16);
-                src_offset += 16;
-                dst_offset += width;
-                memcpy(y_dst + dst_offset, y_src + src_offset, 16);
-                src_offset += 16;
-                dst_offset += width;
-            }
-        }
-        if (aligned_width != width) {
-            src_offset = (tiled_width * i) + (j << 4);
-            dst_offset = width * i + j;
-            for (k = 0; k < height - aligned_height; k = k + 2) {
-                memcpy(y_dst + dst_offset, y_src + src_offset, width - j);
-                src_offset += 16;
-                dst_offset += width;
-                memcpy(y_dst + dst_offset, y_src + src_offset, width - j);
-                src_offset += 16;
-                dst_offset += width;
-            }
-        }
-    }
-}
-
-/*
- * Converts tiled data to linear for mfc 6.x tiled
- * 1. uv of nv12t to uv of yuv420s
->>>>>>> 9b81eb7... hardware: exynos5: add initial libswconverter
  *
  * @param dst
  *   uv address of yuv420s[out]
@@ -1414,74 +1294,11 @@ void csc_tiled_to_linear_uv(
     unsigned int width,
     unsigned int height)
 {
-<<<<<<< HEAD
     csc_tiled_to_linear_crop(uv_dst, uv_src, width, height, 0, 0, 0, 0);
 }
 
 /*
  * Converts tiled data to linear
-=======
-    unsigned int i, j, k;
-    unsigned int aligned_width, aligned_height;
-    unsigned int tiled_width;
-    unsigned int src_offset, dst_offset;
-
-    aligned_height = height & (~0x7);
-    aligned_width = width & (~0xF);
-    tiled_width = ((width + 15) >> 4) << 4;
-
-    for (i = 0; i < aligned_height; i = i + 8) {
-        for (j = 0; j<aligned_width; j = j + 16) {
-            src_offset = (tiled_width * i) + (j << 3);
-            dst_offset = width * i + j;
-            for (k = 0; k < 4; k++) {
-                memcpy(uv_dst + dst_offset, uv_src + src_offset, 16);
-                src_offset += 16;
-                dst_offset += width;
-                memcpy(uv_dst + dst_offset, uv_src + src_offset, 16);
-                src_offset += 16;
-                dst_offset += width;
-            }
-        }
-        if (aligned_width != width) {
-            src_offset = (tiled_width * i) + (j << 3);
-            dst_offset = width * i + j;
-            for (k = 0; k < 4; k++) {
-                memcpy(uv_dst + dst_offset, uv_src + src_offset, width - j);
-                src_offset += 16;
-                dst_offset += width;
-                memcpy(uv_dst + dst_offset, uv_src + src_offset, width - j);
-                src_offset += 16;
-                dst_offset += width;
-            }
-        }
-    }
-
-    if (aligned_height != height) {
-        for (j = 0; j<aligned_width; j = j + 16) {
-            src_offset = (tiled_width * i) + (j << 3);
-            dst_offset = width * i + j;
-            for (k = 0; k < height - aligned_height; k = k + 1) {
-                memcpy(uv_dst + dst_offset, uv_src + src_offset, 16);
-                src_offset += 16;
-                dst_offset += width;
-            }
-        }
-        if (aligned_width != width) {
-            src_offset = (tiled_width * i) + (j << 3);
-            dst_offset = width * i + j;
-            for (k = 0; k < height - aligned_height; k = k + 1) {
-                memcpy(uv_dst + dst_offset, uv_src + src_offset, width - j);
-                src_offset += 16;
-                dst_offset += width;
-            }
-        }
-    }
-}
-
-/*
- * Converts tiled data to linear for mfc 6.x tiled
->>>>>>> 9b81eb7... hardware: exynos5: add initial libswconverter
  * 1. uv of nt12t to uv of yuv420p
  *
  * @param u_dst
@@ -1506,80 +1323,12 @@ void csc_tiled_to_linear_uv_deinterleave(
     unsigned int width,
     unsigned int height)
 {
-<<<<<<< HEAD
     csc_tiled_to_linear_deinterleave_crop(u_dst, v_dst, uv_src, width, height,
                                           0, 0, 0, 0);
-=======
-    unsigned int i, j, k;
-    unsigned int aligned_width, aligned_height;
-    unsigned int tiled_width;
-    unsigned int src_offset, dst_offset;
-
-    aligned_height = height & (~0x7);
-    aligned_width = width & (~0xF);
-    tiled_width = ((width + 15) >> 4) << 4;
-
-    for (i = 0; i < aligned_height; i = i + 8) {
-        for (j = 0; j<aligned_width; j = j + 16) {
-            src_offset = (tiled_width * i) + (j << 3);
-            dst_offset = (width >> 1) * i + (j >> 1);
-            for (k = 0; k < 4; k++) {
-                csc_deinterleave_memcpy(u_dst + dst_offset, v_dst + dst_offset,
-                                        uv_src + src_offset, 16);
-                src_offset += 16;
-                dst_offset += width >> 1;
-                csc_deinterleave_memcpy(u_dst + dst_offset, v_dst + dst_offset,
-                                        uv_src + src_offset, 16);
-                src_offset += 16;
-                dst_offset += width >> 1;
-            }
-        }
-        if (aligned_width != width) {
-            src_offset = (tiled_width * i) + (j << 3);
-            dst_offset = (width >> 1) * i + (j >> 1);
-            for (k = 0; k < 4; k++) {
-                csc_deinterleave_memcpy(u_dst + dst_offset, v_dst + dst_offset,
-                                        uv_src + src_offset, width - j);
-                src_offset += 16;
-                dst_offset += width >> 1;
-                csc_deinterleave_memcpy(u_dst + dst_offset, v_dst + dst_offset,
-                                        uv_src + src_offset, width - j);
-                src_offset += 16;
-                dst_offset += width >> 1;
-            }
-        }
-    }
-    if (aligned_height != height) {
-        for (j = 0; j<aligned_width; j = j + 16) {
-            src_offset = (tiled_width * i) + (j << 3);
-            dst_offset = (width >> 1) * i + (j >> 1);
-            for (k = 0; k < height - aligned_height; k = k + 1) {
-                csc_deinterleave_memcpy(u_dst + dst_offset, v_dst + dst_offset,
-                                        uv_src + src_offset, 16);
-                src_offset += 16;
-                dst_offset += width >> 1;
-            }
-        }
-        if (aligned_width != width) {
-            src_offset = (tiled_width * i) + (j << 3);
-            dst_offset = (width >> 1) * i + (j >> 1);
-            for (k = 0; k < height - aligned_height; k = k + 1) {
-                csc_deinterleave_memcpy(u_dst + dst_offset, v_dst + dst_offset,
-                                        uv_src + src_offset, width - j);
-                src_offset += 16;
-                dst_offset += width >> 1;
-            }
-        }
-    }
->>>>>>> 9b81eb7... hardware: exynos5: add initial libswconverter
 }
 
 /*
  * Converts linear data to tiled
-<<<<<<< HEAD
-=======
- * It supports mfc 6.x tiled
->>>>>>> 9b81eb7... hardware: exynos5: add initial libswconverter
  * 1. y of yuv420 to y of nv12t
  *
  * @param dst
@@ -1603,19 +1352,11 @@ void csc_linear_to_tiled_y(
     unsigned int width,
     unsigned int height)
 {
-<<<<<<< HEAD
     csc_linear_to_tiled_crop(y_dst, y_src, width, height, 0, 0, 0, 0);
-=======
-
->>>>>>> 9b81eb7... hardware: exynos5: add initial libswconverter
 }
 
 /*
  * Converts and interleaves linear data to tiled
-<<<<<<< HEAD
-=======
- * It supports mfc 6.x tiled
->>>>>>> 9b81eb7... hardware: exynos5: add initial libswconverter
  * 1. uv of nv12t to uv of yuv420
  *
  * @param dst
@@ -1641,7 +1382,6 @@ void csc_linear_to_tiled_uv(
     unsigned int width,
     unsigned int height)
 {
-<<<<<<< HEAD
     csc_linear_to_tiled_interleave_crop(uv_dst, u_src, v_src, width, height,
                                         0, 0, 0, 0);
 }
@@ -1786,53 +1526,6 @@ void csc_linear_to_tiled_uv_neon(
 {
     csc_linear_to_tiled_interleave_crop_neon(uv_dst, u_src, v_src,
                                              width, height, 0, 0, 0, 0);
-=======
-
-}
-
-void Tile2D_To_YUV420(unsigned char *Y_plane, unsigned char *Cb_plane, unsigned char *Cr_plane,
-                        unsigned int y_addr, unsigned int c_addr, unsigned int width, unsigned int height)
-{
-    int x, y, j, k, l;
-    int out_of_width, actual_width;
-    unsigned int base_addr, data;
-
-    // y: 0, 16, 32, ...
-    for (y = 0; y < height; y += 16) {
-        // x: 0, 16, 32, ...
-        for (x = 0; x < width; x += 16) {
-            out_of_width = (x + 16) > width ? 1 : 0;
-            base_addr = y_addr + Tile2D_To_Linear(width, height, x, y, 0);
-
-            for (k = 0; (k < 16) && ((y + k) < height); k++) {
-                actual_width = out_of_width ? ((width%4)?((width%16) / 4 + 1) : ((width%16) / 4)) : 4;
-                for (l = 0; l < actual_width; l++) {
-                    data = *((unsigned int*)(base_addr + 16*k + l*4));
-                    for (j = 0; (j < 4) && (x + l*4 + j) < width; j++) {
-                        Y_plane[(y+k)*width + x + l*4 +j] = (data>>(8*j))&0xff;
-                    }
-                }
-            }
-        }
-    }
-
-    for (y = 0; y < height/2; y += 8) {
-        for (x = 0; x < width; x += 16) {
-            out_of_width = (x + 16) > width ? 1 : 0;
-            base_addr = c_addr + Tile2D_To_Linear(width, height/2, x, y, 1);
-            for (k = 0; (k < 8) && ((y+k) < height/2); k++) {
-                actual_width = out_of_width ? ((width%4) ? ((width%16) / 4 + 1) : ((width%16) / 4)) : 4;
-                for (l = 0; l < actual_width; l++) {
-                    data = *((unsigned int*)(base_addr + 16*k + l*4));
-                    for (j = 0; (j < 2) && (x/2 + l*2 +j) < width/2; j++) {
-                        Cb_plane[(y+k)*width/2 + x/2 + l*2 +j] = (data>> (8*2*j))&0xff;
-                        Cr_plane[(y+k)*width/2 + x/2 + l*2 +j] = (data>>(8*2*j+8))&0xff;
-                    }
-                }
-            }
-        }
-    }
->>>>>>> 9b81eb7... hardware: exynos5: add initial libswconverter
 }
 
 /*
@@ -1861,13 +1554,8 @@ void csc_RGB565_to_YUV420P(
     unsigned char *u_dst,
     unsigned char *v_dst,
     unsigned char *rgb_src,
-<<<<<<< HEAD
     unsigned int width,
     unsigned int height)
-=======
-    int width,
-    int height)
->>>>>>> 9b81eb7... hardware: exynos5: add initial libswconverter
 {
     unsigned int i, j;
     unsigned int tmp;
@@ -1940,13 +1628,8 @@ void csc_RGB565_to_YUV420SP(
     unsigned char *y_dst,
     unsigned char *uv_dst,
     unsigned char *rgb_src,
-<<<<<<< HEAD
     unsigned int width,
     unsigned int height)
-=======
-    int width,
-    int height)
->>>>>>> 9b81eb7... hardware: exynos5: add initial libswconverter
 {
     unsigned int i, j;
     unsigned int tmp;
@@ -1997,11 +1680,7 @@ void csc_RGB565_to_YUV420SP(
 }
 
 /*
-<<<<<<< HEAD
  * Converts ARGB8888 to YUV420P
-=======
- * Converts RGB8888 to YUV420P
->>>>>>> 9b81eb7... hardware: exynos5: add initial libswconverter
  *
  * @param y_dst
  *   Y plane address of YUV420P[out]
@@ -2079,7 +1758,6 @@ void csc_ARGB8888_to_YUV420P(
 
 
 /*
-<<<<<<< HEAD
  * Converts ARGB8888 to YUV420SP
  *
  * @param y_dst
@@ -2087,15 +1765,6 @@ void csc_ARGB8888_to_YUV420P(
  *
  * @param uv_dst
  *   UV plane address of YUV420SP[out]
-=======
- * Converts ARGB8888 to YUV420S
- *
- * @param y_dst
- *   Y plane address of YUV420S[out]
- *
- * @param uv_dst
- *   UV plane address of YUV420S[out]
->>>>>>> 9b81eb7... hardware: exynos5: add initial libswconverter
  *
  * @param rgb_src
  *   Address of ARGB8888[in]
