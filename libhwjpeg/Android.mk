@@ -16,7 +16,7 @@ LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH) \
-	hardware/samsung_slsi/exynos5/include
+	hardware/samsung_slsi/exynos4/include
 
 LOCAL_SRC_FILES:= \
 	ExynosJpegBase.cpp \

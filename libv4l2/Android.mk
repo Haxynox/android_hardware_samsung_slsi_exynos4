@@ -23,7 +23,7 @@ LOCAL_SRC_FILES := \
 
 LOCAL_C_INCLUDES := \
 	$(LOCAL_PATH)/../include \
-	$(TOP)/hardware/samsung_slsi/exynos5/libexynosutils
+	$(TOP)/hardware/samsung_slsi/exynos4/libexynosutils
 
 LOCAL_SHARED_LIBRARIES := \
 	liblog \

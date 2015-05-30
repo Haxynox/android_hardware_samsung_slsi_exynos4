@@ -13,7 +13,7 @@ LOCAL_C_INCLUDES := \
     system/core/include \
     $(LOCAL_PATH)/../exynos_omx/openmax/$(OMX_NAME)_omx/include/khronos \
     $(LOCAL_PATH)/../exynos_omx/openmax/$(OMX_NAME)_omx/include/$(OMX_NAME) \
-    hardware/samsung_slsi/exynos5/include
+    hardware/samsung_slsi/exynos4/include
 
 LOCAL_CFLAGS := \
     -DUSE_SAMSUNG_COLORFORMAT \
@@ -39,7 +39,7 @@ LOCAL_SRC_FILES := \
 LOCAL_C_INCLUDES := \
 	hardware/samsung_slsi/openmax/include/khronos \
 	hardware/samsung_slsi/openmax/include/$(OMX_NAME) \
-    hardware/samsung_slsi/exynos5/include \
+    hardware/samsung_slsi/exynos4/include \
 	$(LOCAL_PATH)/../libexynosutils
 
 LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)
